@@ -1,0 +1,140 @@
+
+inventario = []
+
+def registrar_componente():
+    print("\nRegistrar componente")
+
+    id_componente = input("Ingrese el ID: ")
+
+    for componente in inventario:
+        if componente["id"] == id_componente:
+            print("El ID ya existe.")
+            return
+
+    nombre = input("Ingrese el nombre: ")
+    categoria = input("Ingrese la categoria: ")
+
+    try:
+        stock = int(input("Ingrese el stock: "))
+        precio = float(input("Ingrese el precio unitario: "))
+
+        if stock < 0 or precio < 0:
+            print("El stock y el precio no pueden ser negativos.")
+            return
+
+    except ValueError:
+        print("Debe ingresar valores numericos validos.")
+        return
+
+    nuevo_componente = {
+        "id": id_componente,
+        "nombre": nombre,
+        "categoria": categoria,
+        "stock": stock,
+        "precio_unitario": precio
+    }
+
+    inventario.append(nuevo_componente)
+    print("Componente registrado correctamente.")
+
+
+def consultar_inventario():
+    if len(inventario) == 0:
+        print("El inventario esta vacio.")
+    else:
+        for componente in inventario:
+            print("\nID:", componente["id"])
+            print("Nombre:", componente["nombre"])
+            print("Categoria:", componente["categoria"])
+            print("Stock:", componente["stock"])
+            print("Precio:", componente["precio_unitario"])
+
+
+def filtrar_categoria():
+    categoria_buscar = input("Ingrese la categoria: ")
+    encontrado = False
+
+    for componente in inventario:
+        if componente["categoria"].lower() == categoria_buscar.lower():
+            print("\nID:", componente["id"])
+            print("Nombre:", componente["nombre"])
+            print("Categoria:", componente["categoria"])
+            print("Stock:", componente["stock"])
+            print("Precio:", componente["precio_unitario"])
+            encontrado = True
+
+    if not encontrado:
+        print("No se encontraron componentes.")
+
+
+def actualizar_stock():
+    id_buscar = input("Ingrese el ID del componente: ")
+    encontrado = False
+
+    for componente in inventario:
+        if componente["id"] == id_buscar:
+            encontrado = True
+
+            print("Stock actual:", componente["stock"])
+            print("1. Agregar unidades")
+            print("2. Retirar unidades")
+
+            opcion = input("Seleccione una opcion: ")
+
+            if opcion == "1" or opcion == "2":
+                try:
+                    cantidad = int(input("Ingrese la cantidad: "))
+
+                    if cantidad <= 0:
+                        print("La cantidad debe ser mayor que cero.")
+
+                    elif opcion == "1":
+                        componente["stock"] += cantidad
+                        print("Stock actualizado correctamente.")
+
+                    elif opcion == "2":
+                        if cantidad <= componente["stock"]:
+                            componente["stock"] -= cantidad
+                            print("Stock actualizado correctamente.")
+                        else:
+                            print("No hay suficiente stock.")
+
+                except ValueError:
+                    print("Ingrese una cantidad numerica valida.")
+            else:
+                print("Opcion invalida.")
+
+            break
+
+    if not encontrado:
+        print("Componente no encontrado.")
+
+
+while True:
+    print("\nSISTEMA DE INVENTARIO DE ROBOTICA")
+    print("1. Registrar componente")
+    print("2. Consultar inventario")
+    print("3. Filtrar por categoria")
+    print("4. Actualizar stock")
+    print("5. Salir")
+
+    opcion = input("Seleccione una opcion: ")
+
+    if opcion == "1":
+        registrar_componente()
+
+    elif opcion == "2":
+        consultar_inventario()
+
+    elif opcion == "3":
+        filtrar_categoria()
+
+    elif opcion == "4":
+        actualizar_stock()
+
+    elif opcion == "5":
+        print("Gracias por utilizar el sistema.")
+        break
+
+    else:
+        print("Opcion incorrecta. Intente nuevamente.")
